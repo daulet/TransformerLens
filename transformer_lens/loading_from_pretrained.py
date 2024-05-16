@@ -2686,7 +2686,6 @@ def convert_gemma_weights(gemma, cfg: HookedTransformerConfig):
     return state_dict
 
 # TODO some kind of assertion that all weights were loaded
-# TODO address message: Missing key for a weight matrix in pretrained, filled in with an empty tensor: blocks.39.attn._W_K
 def convert_cohere_weights(phi, cfg: HookedTransformerConfig):
     state_dict = {}
 
@@ -2709,8 +2708,8 @@ def convert_cohere_weights(phi, cfg: HookedTransformerConfig):
             W_V, "(n_head d_head) d_model  -> n_head d_model d_head", n_head=cfg.n_heads
         )
         state_dict[f"blocks.{l}.attn.W_Q"] = W_Q
-        state_dict[f"blocks.{l}.attn.W_K"] = W_K
-        state_dict[f"blocks.{l}.attn.W_V"] = W_V
+        state_dict[f"blocks.{l}.attn._W_K"] = W_K
+        state_dict[f"blocks.{l}.attn._W_V"] = W_V
 
         # b_Q = phi.model.layers[l].self_attn.q_proj.bias
         # b_K = phi.model.layers[l].self_attn.k_proj.bias
